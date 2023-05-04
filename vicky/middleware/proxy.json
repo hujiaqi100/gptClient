@@ -1,0 +1,17 @@
+{
+    "test": {
+        "mushroom": "/aa/cc/mushroom",
+        "clover": "/aa/cc/clover",
+        "test": "/aa/cc/test",
+        "loginTitle": "/loginData",
+        "chat": "/chat",
+        "createFile": "/create/chat",
+        "deleteFile": "/delete/chat",
+        "chooseFile": "/choose/chat",
+        "chooseall": "/chooseall/chat",
+        "writeMessage": "/write"
+    },
+    "test2": {
+        "test": "/aa/cc/test"
+    }
+}
