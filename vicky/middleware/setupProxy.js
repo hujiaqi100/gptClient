@@ -55,10 +55,8 @@ module.exports = function (app) {
                     } else {
                         ak = ""
                     }
-                    // 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
                     const { Configuration, OpenAIApi } = require("openai");
                     const configuration = new Configuration({
-                        // organization: "org-ZA5UYd84cJMAkxFT1Rny5mir",
                         apiKey: ak,
                     });
                     const openai = new OpenAIApi(configuration);

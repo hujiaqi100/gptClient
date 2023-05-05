@@ -21,7 +21,6 @@ const rr = (win) => {
   })
   const { app } = require('electron')
   const akPath = path.join(app.getPath('exe'), `../ak`)
-  // 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
   route.get('/reboot', (req, res) => {
     const { execSync } = require('child_process')
     execSync(`rm -rf ${path.join(akPath, 'ak.txt')}`)
