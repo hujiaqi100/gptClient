@@ -43,7 +43,7 @@ function createWindow() {
         if (mainWindow.isVisible()) {
             mainWindow.hide()
         } else {
-            mainWindow.setPosition(x, y) // 设置窗口位置
+            mainWindow.setPosition(x, y)
             mainWindow.show()
         }
     })
