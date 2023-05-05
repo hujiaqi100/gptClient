@@ -15,6 +15,10 @@
                 "to": "../macos/out"
             },
             {
+                "from": "./ak",
+                "to": "../macos/ak"
+            },
+            {
                 "from": "./history",
                 "to": "../macos/history"
             },
@@ -43,7 +47,7 @@
     "description": "",
     "main": "main.js",
     "scripts": {
-        "eb": "webpack --mode development --config ./build/webpack.common.js && electron-builder",
+        "eb": "rm -rf dist && rm -rf out && webpack --mode development --config ./build/webpack.common.js && electron-builder",
         "devse": "electron-builder",
         "dev": "pkg . -t node14-macos-x64 && webpack --mode development --config ./build/webpack.common.js && mkdir out && mv ccw out/ && mv dist out/ && cd out && mkdir history"
     },

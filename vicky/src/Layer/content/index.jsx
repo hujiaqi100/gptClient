@@ -1,14 +1,15 @@
 import React, { forwardRef, useEffect, useRef, useState, useImperativeHandle } from 'react'
 import './index.less'
-import { Input } from 'antd';
+import { Input, message } from 'antd';
 import hljs from 'highlight.js';
 // import 'github-markdown-css/github-markdown.css'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
-import { atomDark } from 'react-syntax-highlighter/dist/esm/styles/prism'
+import { atomDark, twilight, funky, f, ghcolors, vs, vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism'
 import ReactMarkdown from 'react-markdown'
 import _ from 'lodash'
 const { TextArea } = Input;
 import axios from 'axios';
+import GG from './lolo-rurudo.gif'
 const Chat = (props) => {
     const { val, idx, gg } = props
     return <div key={idx} className='chat'>
@@ -23,24 +24,22 @@ const Chat = (props) => {
 
                 </div>
                 <div className="wap">
-                    <pre>
-                        <ReactMarkdown
-                            children={val.content}
-                            components={{
-                                code({ node, inline, className, children, ...props }) {
-                                    return <SyntaxHighlighter
-                                        showLineNumbers={true} // 是否展示左侧行数
-                                        lineNumberStyle={{ color: '#ddd', fontSize: 10 }} // 左侧行数的样式
-                                        children={String(children).replace(/\n$/, '')}
-                                        style={atomDark}
-                                        language='javascript'
-                                        // PreTag="div"
-                                        {...props}
-                                    />
-                                }
-                            }}
-                        />
-                    </pre>
+                    <ReactMarkdown
+                        children={val.content}
+                        components={{
+                            code({ node, inline, className, children, ...props }) {
+                                return <SyntaxHighlighter
+                                    showLineNumbers={true} // 是否展示左侧行数
+                                    lineNumberStyle={{ color: '#00cc99', fontSize: 8 }}
+                                    children={String(children)}
+                                    style={vscDarkPlus}
+                                    language='javascript'
+                                    PreTag="div"
+                                    {...props}
+                                />
+                            }
+                        }}
+                    />
                 </div>
 
             </div>
@@ -74,6 +73,7 @@ const Content = (props, ref) => {
     useEffect(() => {
         if (cur) {
             (async () => {
+                setLoad(false)
                 setGg(false)
                 await getSession()
             })()
@@ -82,9 +82,7 @@ const Content = (props, ref) => {
             setCurretnSession([])
         }
     }, [cur])
-    const chatChagne = (e) => {
-        setValue(e.target.value)
-    }
+
     const _ref = useRef()
     useEffect(() => {
         if (_ref?.current) {
@@ -98,64 +96,103 @@ const Content = (props, ref) => {
             setGg(false)
         }
     }))
+
+
     return (
         <>
             {
                 reRender ? <></> : <div className='content'>
-                    {load && <div style={{ textAlign: 'center', width: 'calc(100% - 100px)', position: 'fixed', top: '42px', height: '30px', zIndex: 20, display: 'flex', justifyContent: 'center' }}><div
-                        className='xx'
-                    >"loading"</div></div>}
+
                     <div className="chatArea" ref={_ref}>
                         {
                             currentSession && currentSession.length > 0 ? (currentSession ?? []).map((val, idx) => {
-                                return <Chat gg={gg} val={val} idx={idx} />
+                                return <Chat key={idx} gg={gg} val={val} idx={idx} />
                             }) : <></>
                         }
+                        <div className="xx" style={{ width: '100%' }}>
+                            {load && <img src={GG} width="683" height="382.053125" alt="Lolo Rurudo GIF - Lolo Rurudo Maid GIFs" style={{ width: '390px', height: '150px' }} />}
+                        </div>
 
                     </div>
-                    <div className="inputArae">
-                        <TextArea value={value} style={{ background: '#0009', color: '#fff9', width: '100%', height: '100%', fontSize: '20px' }} onKeyPress={async (e) => {
-                            if (e.charCode == 13) {
-                                setValue("")
-                                setGg(true)
-                                setLoad(true)
-                                await axios({
-                                    url: '/test/writeMessage',
-                                    method: "post",
-                                    data: { role: 'user', content: value, file: cur }
-                                })
-                                await getSession()
-                                const data = await axios.get('/test/chooseFile', {
-                                    params: {
-                                        id: cur,
-                                        name: cur
-                                    }
-                                })
-                                const repeat = await axios({
-                                    url: '/test/chat',
-                                    method: "post",
-                                    data: {
-                                        model: "gpt-3.5-turbo",
-                                        messages: data.data,
-                                    }
-                                })
-                                if (repeat) {
-                                    const res = await axios({
-                                        url: '/test/writeMessage',
-                                        method: "post",
-                                        data: Object.assign(repeat.data.message, { file: cur })
-                                    })
-                                    await getSession()
-                                    res && setGg(false)
-                                    res && setLoad(false)
-                                }
-                            }
-                        }} disabled={gg} onChange={chatChagne} autoSize={{ minRows: 4, maxRows: 4 }} bordered={false} />
-                    </div>
+                    <InputArea value={value} setValue={setValue} gg={gg} setGg={setGg}
+                        setLoad={setLoad}
+                        getSession={getSession}
+                        cur={cur}
+                    />
                 </div>
             }
         </>
     )
+}
+const InputArea = ({ value, setValue, gg, setGg, setLoad, getSession, cur }) => {
+    const ref = useRef()
+    useEffect(() => {
+        const fo = (e) => {
+            if (e.keyCode >= 65 && e.keyCode <= 111) {
+                ref.current.focus();
+            }
+        }
+        window.addEventListener('keypress', fo, false)
+        return () => {
+            window.removeEventListener('keypress', fo, false)
+        }
+    }, [])
+    const onKey = async (e) => {
+        const st = ref.current.value
+        setValue("")
+        setGg(true)
+        setLoad(true)
+        await axios({
+            url: '/test/writeMessage',
+            method: "post",
+            data: { role: 'user', content: st, file: cur }
+        })
+        ref.current.value = ""
+        await getSession()
+        const data = await axios.get('/test/chooseFile', {
+            params: {
+                id: cur,
+                name: cur
+            }
+        })
+        const repeat = await axios({
+            url: '/test/chat',
+            method: "post",
+            data: {
+                model: "gpt-3.5-turbo",
+                messages: data.data,
+            }
+        })
+        if (repeat?.data?.message) {
+            const res = await axios({
+                url: '/test/writeMessage',
+                method: "post",
+                data: Object.assign(repeat.data.message, { file: cur })
+            })
+            await getSession()
+            res && setGg(false)
+            res && setLoad(false)
+        } else {
+            message.error("ak有误 也许吧。。。")
+        }
+    }
+    // const chatChagne = (e) => {
+    //     setValue(e.target.value)
+    // }
+    return <div className="inputArae">
+        <input ref={ref} style={{
+            background: '#0009', color: '#fff', width: '100%', height: '100%',
+            border: 0,
+            fontSize: '16px',
+            paddingLeft: '12px'
+        }}
+            tabIndex={-1}
+            onKeyPress={async (e) => {
+                if (e.charCode == 13) {
+                    onKey(e)
+                }
+            }} disabled={gg} bordered={false} />
+    </div>
 }
 
 export default forwardRef(Content)

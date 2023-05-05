@@ -5,7 +5,8 @@ const { app } = require('electron')
 
 const write = (datas) => {
     const { file, content, role } = datas
-    const currentPath = path.join(app.getPath('exe'), `../history/${file}`)
+    const historyPath = path.join(app.getPath('exe'), `../history`)
+    const currentPath = path.join(historyPath, file)
     const data = fs.readFileSync(currentPath, 'utf-8')
     const newArr = _.cloneDeep(JSON.parse(data))
     newArr.push({ role, content })

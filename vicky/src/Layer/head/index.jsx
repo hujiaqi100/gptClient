@@ -2,12 +2,14 @@ import React from 'react'
 import './index.less'
 import { Button } from 'antd'
 import axios from 'axios'
-const Head = () => {
+const Head = (props) => {
   return (
-    <div style={{ textAlign: 'center' }}>
-      &nbsp;&nbsp;胡桑的Gpt 3.5测试项目
-      &nbsp;&nbsp;&nbsp;
-
+    <div style={{
+      position: "absolute",
+      right: '80px',
+      top: '3.2px'
+    }}>
+      {props.children}
     </div>
   )
 }

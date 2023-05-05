@@ -9,7 +9,10 @@
         "deleteFile": "/delete/chat",
         "chooseFile": "/choose/chat",
         "chooseall": "/chooseall/chat",
-        "writeMessage": "/write"
+        "writeMessage": "/write",
+        "checkAk": "/checkAk",
+        "setAk": "/setAk",
+        "reboot": "/reboot"
     },
     "test2": {
         "test": "/aa/cc/test"

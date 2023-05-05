@@ -21,12 +21,8 @@ const findRequestPath = (path) => {
     }
     return void 0
 }
-const { Configuration, OpenAIApi } = require("openai");
-const configuration = new Configuration({
-    organization: "org-ZA5UYd84cJMAkxFT1Rny5mir",
-    apiKey: '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',
-});
-const openai = new OpenAIApi(configuration);
+const fs = require('fs')
+const $path = require('path')
 module.exports = function (app) {
     app.use(async (req, res, next) => {
         if (req.path === '/favicon.ico') next()
@@ -51,8 +47,25 @@ module.exports = function (app) {
                             res.send("aa")
                         });
                 } else {
+                    const { app } = require('electron')
+                    const akPath = $path.join(app.getPath('exe'), `../ak`)
+                    let ak;
+                    if (fs.existsSync($path.join(akPath, 'ak.txt'))) {
+                        ak = fs.readFileSync($path.join(akPath, 'ak.txt'), 'utf-8')
+                    } else {
+                        ak = ""
+                    }
+                    // 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
+                    const { Configuration, OpenAIApi } = require("openai");
+                    const configuration = new Configuration({
+                        // organization: "org-ZA5UYd84cJMAkxFT1Rny5mir",
+                        apiKey: ak,
+                    });
+                    const openai = new OpenAIApi(configuration);
                     openai.createChatCompletion(req.body).then(data => {
                         res.send(data?.data?.choices[0])
+                    }).catch(e => {
+                        res.send(new Error(e).message)
                     })
                 }
 

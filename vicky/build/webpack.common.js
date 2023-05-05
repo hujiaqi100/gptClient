@@ -29,8 +29,8 @@ const commonConfig = {
     plugins: [
         // new CompressionPlugin({
         //     filename: "[path][base].gz",
-		// algorithm: 'gzip',
-	    // test: /\.(js)$/,
+        // algorithm: 'gzip',
+        // test: /\.(js)$/,
         //    // test: /\.js$|\.css$|\.html$|\.ttf$|\.eot$|\.woff$/,
         //    threshold: 10240,
         //     minRatio: 0.8,
@@ -105,7 +105,7 @@ const commonConfig = {
             //     },
             // },
             {
-                test: /\.(png|jpg|woff|woff2?|eot|ttf|otf|svg)$/,
+                test: /\.(png|jpg|woff|woff2?|eot|ttf|otf|svg|gif)$/,
                 exclude: /(node_modules)/,
                 use: ['url-loader?limit=8192']
             }
